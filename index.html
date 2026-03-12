@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#04040e">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Chronos Quiz · ¿Qué es Filosofar?">
+<title>CHRONOS QUIZ — ¿Qué es Filosofar?</title>
+
+<style>
+/*
+  Chronos Quiz — ¿Qué es Filosofar?
+  Unidad 1 · Tema 3 · Filosofía 6.º Año
+  Escuela Amado Juri · Tucumán · Argentina
+  Prof. Julio Alberto Lazarte
+  v1.0 — 2026-03-11 — Versión inicial
+*/
+
+:root{
+  --bg:      #04040e;
+  --bg2:     #080818;
+  --surface: #0c0c22;
+  --white:   #e8e0ff;
+  --dim:     #5a5580;
+  --border:  #1a1a3a;
+  --purple:  #b44ffc;
+  --cyan:    #00e5ff;
+  --green:   #00ff88;
+  --red:     #ff3b5c;
+  --amber:   #ffb300;
+  --amber2:  #ff8c00;
+  --gold:    #f0c040;
+  --orange:  #ff6b35;
+  --teal:    #00ffcc;
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;background:var(--bg);color:var(--white);font-family:'Share Tech Mono',monospace;font-size:14px;-webkit-font-smoothing:antialiased;overflow-x:hidden;}
+
+/* ── FONDO GRID ───────────────────────────── */
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;
+  background-image:
+    linear-gradient(rgba(180,79,252,.04) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(180,79,252,.04) 1px,transparent 1px);
+  background-size:40px 40px;pointer-events:none;
+}
+
+/* ── FONTS ────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&family=Press+Start+2P&display=swap');
+
+/* ── SCREENS ──────────────────────────────── */
+#screen-registro,#screen-intro,#screen-quiz,#screen-resultado{
+  position:relative;z-index:1;
+}
+#screen-registro{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:20px;}
+#screen-intro{display:none;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:20px;}
+#screen-quiz{display:none;flex-direction:column;min-height:100vh;}
+#screen-resultado{display:none;flex-direction:column;align-items:center;min-height:100vh;padding:20px;}
+
+/* ── REGISTRO ─────────────────────────────── */
+.reg-box{width:100%;max-width:400px;background:var(--surface);border:1px solid rgba(180,79,252,.35);border-radius:8px;padding:28px 22px;box-shadow:0 0 32px rgba(180,79,252,.12);}
+.reg-title{font-family:'Press Start 2P',monospace;font-size:clamp(14px,4vw,24px);color:var(--purple);text-shadow:0 0 18px var(--purple);text-align:center;line-height:1.5;margin-bottom:6px;}
+.reg-sub{font-family:'Orbitron',sans-serif;font-size:9px;letter-spacing:3px;color:var(--dim);text-align:center;margin-bottom:22px;}
+.reg-tema{font-family:'Orbitron',sans-serif;font-size:9px;letter-spacing:2px;color:var(--purple);text-align:center;margin-bottom:22px;padding:6px 10px;border:1px solid rgba(180,79,252,.3);border-radius:4px;}
+.reg-field{margin-bottom:14px;}
+.reg-label{font-family:'Orbitron',sans-serif;font-size:8px;letter-spacing:2px;color:var(--dim);display:block;margin-bottom:5px;}
+.reg-input{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:4px;padding:10px 12px;color:var(--white);font-family:'Share Tech Mono',monospace;font-size:14px;outline:none;transition:border-color .2s;}
+.reg-input:focus{border-color:var(--purple);box-shadow:0 0 10px rgba(180,79,252,.2);}
+.btn-registrar{width:100%;margin-top:6px;font-family:'Press Start 2P',monospace;font-size:10px;background:transparent;border:2px solid var(--purple);color:var(--purple);padding:13px;border-radius:4px;cursor:pointer;letter-spacing:2px;transition:all .2s;box-shadow:0 0 12px rgba(180,79,252,.18);}
+.btn-registrar:hover{background:var(--purple);color:#fff;box-shadow:0 0 26px rgba(180,79,252,.55);}
+
+/* ── INTRO ────────────────────────────────── */
+.logo-title{font-family:'Press Start 2P',monospace;font-size:clamp(16px,5vw,30px);color:var(--purple);text-shadow:0 0 18px var(--purple),0 0 40px rgba(180,79,252,.4);text-align:center;line-height:1.5;margin-bottom:4px;animation:flicker 3s infinite;}
+.logo-sub{font-family:'Orbitron',sans-serif;font-size:10px;letter-spacing:3px;color:var(--dim);text-align:center;margin-bottom:18px;}
+.intro-box{width:100%;max-width:460px;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:18px 16px;margin-bottom:20px;}
+.intro-box h3{font-family:'Orbitron',sans-serif;font-size:10px;letter-spacing:3px;color:var(--purple);margin-bottom:12px;}
+.ejes-preview{display:flex;flex-direction:column;gap:6px;margin-bottom:14px;}
+.eje-preview-row{display:flex;align-items:center;gap:8px;font-size:11px;}
+.eje-preview-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.reglas{list-style:none;font-size:11px;color:var(--dim);line-height:1.9;}
+.reglas li::before{content:'▸ ';color:var(--purple);}
+.dif-section{width:100%;max-width:460px;margin-bottom:18px;}
+.dif-title{font-family:'Orbitron',sans-serif;font-size:9px;letter-spacing:3px;color:var(--dim);text-align:center;margin-bottom:12px;}
+.dif-cards{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;}
+.dif-card{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:12px 8px;text-align:center;cursor:pointer;transition:all .2s;-webkit-tap-highlight-color:transparent;}
+.dif-card:hover{border-color:var(--purple);}
+.dif-card.selected{border-color:currentColor;box-shadow:0 0 16px rgba(255,255,255,.1);}
+.dif-card.aprendiz{color:var(--green);}
+.dif-card.filosofo{color:var(--amber);}
+.dif-card.maestro{color:var(--red);}
+.dif-card.aprendiz.selected{background:rgba(0,255,136,.07);}
+.dif-card.filosofo.selected{background:rgba(255,179,0,.07);}
+.dif-card.maestro.selected{background:rgba(255,59,92,.07);}
+.dif-nombre{font-family:'Press Start 2P',monospace;font-size:7px;margin-bottom:5px;letter-spacing:1px;}
+.dif-tiempo{font-family:'Orbitron',sans-serif;font-size:16px;font-weight:700;}
+.dif-seg{font-size:9px;opacity:.7;}
+.dif-desc{font-size:9px;color:var(--dim);margin-top:4px;line-height:1.4;}
+.btn-start{font-family:'Press Start 2P',monospace;font-size:10px;background:transparent;border:2px solid var(--dim);color:var(--dim);padding:13px 28px;border-radius:4px;cursor:pointer;letter-spacing:2px;transition:all .25s;pointer-events:none;}
+.btn-start.ready{border-color:var(--purple);color:var(--purple);pointer-events:auto;box-shadow:0 0 18px rgba(180,79,252,.25);}
+.btn-start.ready:hover{background:var(--purple);color:#fff;box-shadow:0 0 32px rgba(180,79,252,.55);}
+
+/* ── HUD ──────────────────────────────────── */
+.hud{position:sticky;top:0;z-index:100;background:rgba(4,4,14,.95);backdrop-filter:blur(10px);border-bottom:1px solid var(--border);padding:8px 12px;}
+.hud-row1{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px;}
+.hud-score{font-family:'Orbitron',sans-serif;font-size:18px;font-weight:900;color:var(--gold);text-shadow:0 0 12px rgba(240,192,64,.4);}
+.hud-dif{font-family:'Orbitron',sans-serif;font-size:8px;letter-spacing:2px;padding:3px 9px;border-radius:12px;border:1px solid;}
+.hud-qnum{font-family:'Orbitron',sans-serif;font-size:10px;color:var(--dim);}
+.hud-row2{display:flex;align-items:center;gap:8px;}
+.barra-prog{flex:1;height:5px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden;}
+.barra-prog-fill{height:100%;background:linear-gradient(90deg,var(--purple),var(--cyan));border-radius:3px;transition:width .4s ease;}
+.hud-pct{font-family:'Orbitron',sans-serif;font-size:9px;color:var(--dim);min-width:30px;text-align:right;}
+.hud-row3{display:flex;align-items:center;gap:8px;margin-top:5px;}
+.barra-timer{flex:1;height:6px;background:rgba(255,255,255,.06);border-radius:4px;overflow:hidden;}
+.barra-timer-fill{height:100%;border-radius:4px;transition:width .1s linear,background .5s;}
+.timer-num{font-family:'Orbitron',sans-serif;font-size:13px;min-width:24px;text-align:right;}
+
+/* ── PREGUNTA ─────────────────────────────── */
+.quiz-body{flex:1;padding:16px 13px;max-width:640px;margin:0 auto;width:100%;}
+.eje-header{display:flex;align-items:center;gap:9px;margin-bottom:13px;flex-wrap:wrap;}
+.eje-tag{font-family:'Orbitron',sans-serif;font-size:8px;padding:3px 10px;border-radius:20px;border:1px solid;letter-spacing:2px;}
+.pregunta-num{font-size:10px;color:var(--dim);}
+.pregunta-tipo{font-size:9px;padding:3px 9px;border-radius:10px;background:rgba(255,255,255,.07);color:var(--dim);margin-left:auto;}
+.pregunta-texto{font-family:'Orbitron',sans-serif;letter-spacing:1.2px;font-size:clamp(11px,3vw,15px);line-height:1.65;color:var(--white);margin-bottom:20px;padding:16px;background:linear-gradient(135deg,rgba(10,4,20,.9),rgba(20,8,40,.85));border-radius:8px;border-left:3px solid var(--purple);box-shadow:inset 0 0 18px rgba(0,0,0,.3);}
+.opciones-grid{display:grid;gap:9px;}
+.opcion-btn{background:rgba(10,4,20,.9);border:1px solid rgba(255,255,255,.1);border-radius:6px;padding:13px 16px;color:var(--white);font-family:'Share Tech Mono',monospace;font-size:clamp(11px,2.8vw,14px);cursor:pointer;text-align:left;transition:all .18s;display:flex;align-items:center;gap:11px;line-height:1.4;}
+.opcion-btn:hover:not(:disabled){border-color:var(--purple);background:rgba(180,79,252,.07);transform:translateX(4px);}
+.opcion-key{font-family:'Orbitron',sans-serif;font-size:9px;min-width:20px;height:20px;border-radius:4px;background:rgba(255,255,255,.07);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.opcion-btn.correcta{border-color:var(--green)!important;background:rgba(0,255,136,.12)!important;color:var(--green)!important;box-shadow:0 0 16px rgba(0,255,136,.22)!important;}
+.opcion-btn.correcta .opcion-key{background:var(--green);color:#000;}
+.opcion-btn.incorrecta{border-color:var(--red)!important;background:rgba(255,59,92,.1)!important;color:var(--red)!important;}
+.opcion-btn.incorrecta .opcion-key{background:var(--red);color:#000;}
+.opcion-btn:disabled{cursor:default;transform:none!important;}
+.feedback-box{margin-top:12px;padding:12px 15px;border-radius:6px;font-size:12px;line-height:1.7;display:none;animation:slideUp .3s ease;}
+.feedback-box.correcto{background:rgba(0,255,136,.1);border:1px solid rgba(0,255,136,.3);color:var(--green);}
+.feedback-box.incorrecto{background:rgba(255,59,92,.1);border:1px solid rgba(255,59,92,.3);color:var(--red);}
+.feedback-box.tiempo{background:rgba(255,140,0,.1);border:1px solid rgba(255,140,0,.3);color:var(--amber2);}
+@keyframes slideUp{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+.btn-siguiente{font-family:'Orbitron',sans-serif;font-size:11px;background:transparent;border:1px solid var(--cyan);color:var(--cyan);padding:10px 24px;border-radius:4px;cursor:pointer;margin-top:12px;letter-spacing:2px;transition:all .2s;display:none;}
+.btn-siguiente:hover{background:var(--cyan);color:#000;box-shadow:0 0 16px rgba(0,229,255,.32);}
+
+/* ── RESULTADO ────────────────────────────── */
+.res-titulo{font-family:'Press Start 2P',monospace;font-size:clamp(11px,3.5vw,20px);text-align:center;margin-bottom:5px;animation:flicker 2s infinite;}
+.res-dif{font-family:'Orbitron',sans-serif;font-size:11px;letter-spacing:3px;margin-bottom:14px;}
+.res-score-big{font-family:'Orbitron',sans-serif;font-size:clamp(36px,10vw,66px);font-weight:900;color:var(--gold);text-shadow:0 0 22px var(--gold),0 0 44px rgba(240,192,64,.4);line-height:1;}
+.res-pct{font-family:'Share Tech Mono',monospace;font-size:17px;color:var(--cyan);margin-bottom:18px;}
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;max-width:460px;width:100%;margin-bottom:20px;}
+.stat-card{background:rgba(10,4,20,.8);border:1px solid var(--border);border-radius:6px;padding:13px;text-align:center;}
+.stat-val{font-family:'Orbitron',sans-serif;font-size:21px;font-weight:700;margin-bottom:3px;}
+.stat-label{font-size:9px;color:var(--dim);letter-spacing:1px;}
+.ejes-res{max-width:460px;width:100%;margin-bottom:22px;}
+.eje-res-row{display:flex;align-items:center;gap:9px;margin-bottom:8px;}
+.eje-res-label{font-size:9px;font-family:'Orbitron',sans-serif;letter-spacing:1px;min-width:105px;}
+.eje-res-barra{flex:1;height:10px;background:rgba(255,255,255,.06);border-radius:5px;overflow:hidden;}
+.eje-res-fill{height:100%;border-radius:5px;transition:width 1s ease;}
+.eje-res-num{font-size:10px;color:var(--dim);min-width:28px;text-align:right;}
+
+/* ── APROBACIÓN ───────────────────────────── */
+.aprobacion-box{width:100%;max-width:460px;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:16px;margin-bottom:18px;}
+.aprobacion-title{font-family:'Orbitron',sans-serif;font-size:9px;letter-spacing:2px;color:var(--dim);margin-bottom:10px;text-align:center;}
+.aprobacion-barra-wrap{position:relative;height:18px;background:rgba(255,255,255,.06);border-radius:9px;overflow:visible;margin-bottom:6px;}
+.aprobacion-fill{height:100%;border-radius:9px;transition:width 1s ease;position:relative;z-index:1;}
+.aprobacion-fill.aprobado{background:linear-gradient(90deg,var(--purple),var(--green));box-shadow:0 0 12px rgba(0,255,136,.4);}
+.aprobacion-fill.reprobado{background:linear-gradient(90deg,var(--red),var(--amber2));box-shadow:0 0 12px rgba(255,59,92,.4);}
+.linea70{position:absolute;top:-4px;bottom:-4px;width:2px;background:var(--white);opacity:.5;z-index:2;}
+.aprobacion-labels{display:flex;justify-content:space-between;font-size:9px;color:var(--dim);margin-bottom:8px;}
+.aprobacion-pct-label{font-family:'Orbitron',sans-serif;font-size:13px;font-weight:700;text-align:center;margin-bottom:5px;}
+.aprobacion-badge{font-family:'Press Start 2P',monospace;font-size:9px;text-align:center;padding:6px 12px;border-radius:4px;letter-spacing:1px;}
+.aprobacion-badge.ok{color:var(--green);border:1px solid var(--green);background:rgba(0,255,136,.08);}
+.aprobacion-badge.no{color:var(--red);border:1px solid var(--red);background:rgba(255,59,92,.08);}
+.aprobacion-detalle{font-size:9px;color:var(--dim);text-align:center;margin-top:6px;}
+
+/* ── ENVÍO ────────────────────────────────── */
+.btn-enviar{font-family:'Press Start 2P',monospace;font-size:9px;background:transparent;border:2px solid var(--cyan);color:var(--cyan);padding:12px 22px;border-radius:4px;cursor:pointer;letter-spacing:2px;transition:all .2s;box-shadow:0 0 12px rgba(0,229,255,.18);margin-bottom:8px;}
+.btn-enviar:hover:not(:disabled){background:var(--cyan);color:#000;box-shadow:0 0 26px rgba(0,229,255,.5);}
+.btn-enviar:disabled{opacity:.5;cursor:not-allowed;}
+.envio-status{font-size:11px;text-align:center;min-height:18px;margin-bottom:14px;}
+.btn-reiniciar{font-family:'Press Start 2P',monospace;font-size:9px;background:transparent;border:2px solid var(--amber);color:var(--amber);padding:12px 22px;border-radius:4px;cursor:pointer;letter-spacing:2px;transition:all .2s;box-shadow:0 0 12px rgba(255,179,0,.18);}
+.btn-reiniciar:hover{background:var(--amber);color:#000;box-shadow:0 0 26px rgba(255,179,0,.55);}
+
+/* ── EFECTOS ──────────────────────────────── */
+.flash-overlay{position:fixed;inset:0;pointer-events:none;z-index:500;opacity:0;transition:opacity .1s;}
+.flash-overlay.green{background:rgba(0,255,136,.13);}
+.flash-overlay.red{background:rgba(255,59,92,.13);}
+.combo-popup{position:fixed;top:72px;left:50%;transform:translateX(-50%);font-family:'Press Start 2P',monospace;font-size:12px;color:var(--purple);text-shadow:0 0 11px var(--purple);pointer-events:none;z-index:600;animation:comboPop 1.4s forwards;}
+.particle{position:fixed;bottom:-10px;width:5px;height:5px;border-radius:50%;pointer-events:none;z-index:400;animation:particleUp linear forwards;}
+@keyframes particleUp{0%{bottom:-10px;opacity:1;}100%{bottom:110vh;opacity:0;}}
+@keyframes comboPop{0%{opacity:0;transform:translateX(-50%) scale(.5);}30%{opacity:1;transform:translateX(-50%) scale(1.2);}70%{opacity:1;transform:translateX(-50%) scale(1);}100%{opacity:0;transform:translateX(-50%) scale(.9);}}
+@keyframes flicker{0%,95%,100%{opacity:1;}96%,98%{opacity:.7;}}
+</style>
+
+<div class="flash-overlay" id="flash"></div>
+
+<!-- ══ REGISTRO ══ -->
+<div id="screen-registro">
+  <div class="reg-box">
+    <div class="reg-title">CHRONOS<br>QUIZ</div>
+    <div class="reg-sub">▸ REGISTRO DEL JUGADOR ◂</div>
+    <div class="reg-tema">UNIDAD I · TEMA 3 · ¿QUÉ ES FILOSOFAR?</div>
+    <div class="reg-field">
+      <label class="reg-label">▶ NOMBRE</label>
+      <input class="reg-input" id="reg-nombre" type="text" placeholder="Tu nombre" autocomplete="given-name">
+    </div>
+    <div class="reg-field">
+      <label class="reg-label">▶ APELLIDO</label>
+      <input class="reg-input" id="reg-apellido" type="text" placeholder="Tu apellido" autocomplete="family-name">
+    </div>
+    <div class="reg-field">
+      <label class="reg-label">▶ CURSO</label>
+      <input class="reg-input" id="reg-curso" type="text" placeholder="Ej: 6°A" autocomplete="off">
+    </div>
+    <button class="btn-registrar" onclick="guardarRegistro()">▶ INGRESAR AL QUIZ</button>
+  </div>
+</div>
+
+<!-- ══ INTRO ══ -->
+<div id="screen-intro">
+  <div class="logo-title">CHRONOS<br>QUIZ</div>
+  <div class="logo-sub">¿Qué es Filosofar? · Unidad I · Tema 3</div>
+
+  <div class="intro-box">
+    <h3>⚙ EJES TEMÁTICOS</h3>
+    <div class="ejes-preview">
+      <div class="eje-preview-row"><div class="eje-preview-dot" style="background:#b44ffc"></div><span style="color:#b44ffc">🌟 EL ASOMBRO</span><span style="color:var(--dim);font-size:10px;margin-left:auto">Thaumazein · Origen del filosofar</span></div>
+      <div class="eje-preview-row"><div class="eje-preview-dot" style="background:#00e5ff"></div><span style="color:#00e5ff">🔬 3 TIPOS</span><span style="color:var(--dim);font-size:10px;margin-left:auto">Filosófica · Científica · Religiosa</span></div>
+      <div class="eje-preview-row"><div class="eje-preview-dot" style="background:#f0c040"></div><span style="color:#f0c040">⚡ RASGOS</span><span style="color:var(--dim);font-size:10px;margin-left:auto">5 características de la pregunta filosófica</span></div>
+      <div class="eje-preview-row"><div class="eje-preview-dot" style="background:#ff6b35"></div><span style="color:#ff6b35">🐝 SÓCRATES</span><span style="color:var(--dim);font-size:10px;margin-left:auto">La actitud socrática · El tábano</span></div>
+      <div class="eje-preview-row"><div class="eje-preview-dot" style="background:#39ff7a"></div><span style="color:#39ff7a">📱 VIDA</span><span style="color:var(--dim);font-size:10px;margin-left:auto">Filosofía en lo cotidiano</span></div>
+      <div class="eje-preview-row"><div class="eje-preview-dot" style="background:#00ffcc"></div><span style="color:#00ffcc">🗺️ RAMAS</span><span style="color:var(--dim);font-size:10px;margin-left:auto">Las disciplinas filosóficas</span></div>
+    </div>
+    <ul class="reglas">
+      <li>Respuesta correcta = +100 pts + bonus por tiempo restante</li>
+      <li>Racha de 3 correctas = multiplicador x2</li>
+      <li>Feedback explicado en cada pregunta</li>
+      <li>Al final podés enviar tu resultado al profe</li>
+    </ul>
+  </div>
+
+  <div class="dif-section">
+    <div class="dif-title">▸ ELEGÍ TU NIVEL ◂</div>
+    <div class="dif-cards">
+      <div class="dif-card aprendiz" onclick="seleccionarDif('aprendiz',45)">
+        <div class="dif-nombre">APRENDIZ</div>
+        <div class="dif-tiempo">45<span class="dif-seg">seg</span></div>
+        <div class="dif-desc">Empezando a filosofar</div>
+      </div>
+      <div class="dif-card filosofo" onclick="seleccionarDif('filosofo',30)">
+        <div class="dif-nombre">FILÓSOFO</div>
+        <div class="dif-tiempo">30<span class="dif-seg">seg</span></div>
+        <div class="dif-desc">Ya leíste la app</div>
+      </div>
+      <div class="dif-card maestro" onclick="seleccionarDif('maestro',18)">
+        <div class="dif-nombre">MAESTRO</div>
+        <div class="dif-tiempo">18<span class="dif-seg">seg</span></div>
+        <div class="dif-desc">Modo Sócrates</div>
+      </div>
+    </div>
+  </div>
+  <button class="btn-start" id="btn-start" onclick="iniciarQuiz()">▶ INICIAR QUIZ</button>
+</div>
+
+<!-- ══ QUIZ ══ -->
+<div id="screen-quiz">
+  <div class="hud">
+    <div class="hud-row1">
+      <div class="hud-score" id="hud-score">0</div>
+      <div class="hud-dif" id="hud-dif-badge">—</div>
+      <div class="hud-qnum">Q<span id="hud-qnum">1</span>/<span id="hud-qtotal">—</span></div>
+    </div>
+    <div class="hud-row2">
+      <div class="barra-prog"><div class="barra-prog-fill" id="bgf" style="width:0%"></div></div>
+      <div class="hud-pct" id="bgp">0%</div>
+    </div>
+    <div class="hud-row3">
+      <div class="barra-timer"><div class="barra-timer-fill" id="btf" style="width:100%"></div></div>
+      <div class="timer-num" id="tnum">—</div>
+    </div>
+  </div>
+  <div class="quiz-body" id="quiz-body"></div>
+</div>
+
+<!-- ══ RESULTADO ══ -->
+<div id="screen-resultado">
+  <div class="res-titulo" id="res-titulo">—</div>
+  <div class="res-dif" id="res-dif">—</div>
+  <div class="res-score-big" id="res-score">0</div>
+  <div class="res-pct" id="res-pct">0%</div>
+
+  <div class="stats-grid">
+    <div class="stat-card"><div class="stat-val" id="rc" style="color:var(--green)">0</div><div class="stat-label">CORRECTAS</div></div>
+    <div class="stat-card"><div class="stat-val" id="ri" style="color:var(--red)">0</div><div class="stat-label">INCORRECTAS</div></div>
+    <div class="stat-card"><div class="stat-val" id="rt" style="color:var(--amber)">0</div><div class="stat-label">T. AGOTADO</div></div>
+    <div class="stat-card"><div class="stat-val" id="rr" style="color:var(--purple)">0</div><div class="stat-label">RACHA MÁX.</div></div>
+  </div>
+
+  <div class="aprobacion-box">
+    <div class="aprobacion-title" id="aprobacion-title">NIVEL DE APROBACIÓN</div>
+    <div class="aprobacion-barra-wrap">
+      <div class="aprobacion-fill" id="aprobacion-fill" style="width:0%"></div>
+      <div class="linea70" id="linea70" style="left:70%"></div>
+    </div>
+    <div class="aprobacion-labels"><span>0%</span><span style="color:var(--white);opacity:.6">70% mín.</span><span>100%</span></div>
+    <div class="aprobacion-pct-label" id="aprobacion-pct-label">—</div>
+    <div class="aprobacion-badge" id="aprobacion-badge">—</div>
+    <div class="aprobacion-detalle" id="aprobacion-detalle"></div>
+  </div>
+
+  <div class="ejes-res" id="ejes-res"></div>
+
+  <button class="btn-enviar" id="btn-enviar" onclick="enviarResultado()">📤 ENVIAR RESULTADO AL PROFESOR</button>
+  <div class="envio-status" id="envio-status"></div>
+  <button class="btn-reiniciar" onclick="reiniciar()">↺ JUGAR DE NUEVO</button>
+</div>
+
+<script>
+// ────────────────────────────────────────────────
+// CHRONOS QUIZ — ¿Qué es Filosofar?
+// Unidad 1 · Tema 3
+// v1.0 — 2026-03-11
+// ────────────────────────────────────────────────
+
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbxHuPBB9MW0pMXNh-i8m48T3DFULKKAMxdu6lzkYRPO20JSPp4OCInpMrKDWrzDhHnN/exec';
+
+// ── DIFICULTADES ──
+const DIFS = {
+  aprendiz: { nombre:'Aprendiz',  badge:'APRENDIZ',  seg:45, color:'var(--green)' },
+  filosofo: { nombre:'Filósofo',  badge:'FILÓSOFO',  seg:30, color:'var(--amber)' },
+  maestro:  { nombre:'Maestro',   badge:'MAESTRO',   seg:18, color:'var(--red)'   }
+};
+
+// ── EJES ──
+const EJES = {
+  asombro:   { label:'EL ASOMBRO',   emoji:'🌟', color:'#b44ffc' },
+  tipos:     { label:'3 TIPOS',      emoji:'🔬', color:'#00e5ff' },
+  rasgos:    { label:'RASGOS',       emoji:'⚡', color:'#f0c040' },
+  socrates:  { label:'SÓCRATES',     emoji:'🐝', color:'#ff6b35' },
+  vida:      { label:'VIDA',         emoji:'📱', color:'#39ff7a' },
+  ramas:     { label:'RAMAS',        emoji:'🗺️', color:'#00ffcc' }
+};
+
+// ── PREGUNTAS ──
+const PREGUNTAS = [
+
+  // ══ ASOMBRO ══
+  { eje:'asombro', tipo:'mc',
+    texto:'¿Qué término griego usaba Platón para nombrar el asombro filosófico, ese momento de perplejidad ante algo que debería ser obvio?',
+    opciones:['Logos','Thaumazein','Noesis','Episteme'],
+    correcta:1,
+    dato:'Thaumazein (θαυμάζειν) es la admiración o asombro. Tanto Platón como Aristóteles lo identifican como el único punto de partida posible del filosofar.' },
+
+  { eje:'asombro', tipo:'vf',
+    texto:'Según Aristóteles, el deseo de saber es una tendencia natural del ser humano que no depende de la utilidad práctica del conocimiento.',
+    opciones:['VERDADERO','FALSO'],
+    correcta:0,
+    dato:'Aristóteles abre la Metafísica diciendo exactamente eso: "Todos los hombres tienen por naturaleza el deseo de saber." Y como prueba señala el placer que produce ver y conocer, incluso sin ninguna utilidad.' },
+
+  { eje:'asombro', tipo:'mc',
+    texto:'¿Qué diferencia al asombro filosófico de la curiosidad ordinaria?',
+    opciones:[
+      'El asombro filosófico se resuelve buscando en Google',
+      'La curiosidad ordinaria genera preguntas más profundas',
+      'El asombro filosófico genera perplejidad ante algo que parece obvio y exige pensar, no solo buscar',
+      'Son exactamente lo mismo, solo cambia el nombre'
+    ],
+    correcta:2,
+    dato:'La curiosidad ordinaria se resuelve con datos. El asombro filosófico surge cuando algo que todos dan por sabido de repente aparece como misterioso: ¿qué es el tiempo? ¿qué soy yo realmente?' },
+
+  { eje:'asombro', tipo:'mc',
+    texto:'Según la app "¿Qué es Filosofar?", ¿cuál de estas situaciones cotidianas representa mejor un ejemplo de asombro filosófico en Argentina?',
+    opciones:[
+      'Preguntar cuántos goles hizo Messi en 2023',
+      'Googlear qué temperatura hace hoy',
+      'Ver que todos en el estadio dicen que fue penal y preguntarse si existe la objetividad',
+      'Buscar una receta de empanadas tucumanas'
+    ],
+    correcta:2,
+    dato:'El ejemplo del estadio aparece en la app: dos personas ven lo mismo y llegan a conclusiones opuestas. Eso nos lleva a preguntar si existe la percepción objetiva — una pregunta filosófica genuina.' },
+
+  { eje:'asombro', tipo:'vf',
+    texto:'La filosofía nació principalmente de la necesidad práctica de sobrevivir y resolver problemas cotidianos.',
+    opciones:['VERDADERO','FALSO'],
+    correcta:1,
+    dato:'Tanto Platón como Aristóteles coinciden: la filosofía nació del tiempo libre y el asombro, no de la necesidad. Aristóteles señala que surgió cuando la gente ya tenía resueltas sus necesidades básicas y podía ponerse a pensar.' },
+
+  { eje:'asombro', tipo:'mc',
+    texto:'¿Por qué un bebé que se asombra de todo NO es considerado filósofo?',
+    opciones:[
+      'Porque los bebés no tienen lenguaje',
+      'Porque el bebé no traduce el asombro en preguntas precisas que piensa con rigor y honestidad',
+      'Porque la filosofía es solo para adultos mayores',
+      'Porque los bebés no leen libros'
+    ],
+    correcta:1,
+    dato:'El asombro es condición necesaria pero no suficiente para filosofar. Lo que convierte el asombro en filosofía es la capacidad de transformarlo en preguntas precisas y pensarlas con rigor.' },
+
+  // ══ TIPOS ══
+  { eje:'tipos', tipo:'mc',
+    texto:'¿Cómo se responde una pregunta científica?',
+    opciones:[
+      'Con fe y revelación',
+      'Con argumentos racionales y debate',
+      'Con observación, experimentos y datos verificables',
+      'Con la opinión de la mayoría'
+    ],
+    correcta:2,
+    dato:'Las preguntas científicas se responden con el método empírico: observación, hipótesis, experimento, verificación. Sus respuestas son provisionales y pueden cambiar con nuevos datos.' },
+
+  { eje:'tipos', tipo:'mc',
+    texto:'¿Qué tipo de pregunta es: "¿Es justa la desigualdad económica en Argentina?"',
+    opciones:['Científica','Religiosa','Filosófica','Técnica'],
+    correcta:2,
+    dato:'Se pregunta por la justicia, que no se responde con experimentos ni con fe. Requiere argumentar desde principios racionales sobre qué es justo, qué derechos tenemos, qué debe garantizar el Estado.' },
+
+  { eje:'tipos', tipo:'vf',
+    texto:'Una pregunta religiosa se puede resolver con un experimento científico bien diseñado.',
+    opciones:['VERDADERO','FALSO'],
+    correcta:1,
+    dato:'No. Las preguntas religiosas (¿existe Dios? ¿qué quiere Dios?) pertenecen al ámbito de la fe y la revelación, no del método empírico. El desacuerdo religioso no se resuelve con datos.' },
+
+  { eje:'tipos', tipo:'mc',
+    texto:'Según la app, ¿cuál de estas frases sería UNA pregunta filosófica?',
+    opciones:[
+      '¿Cuántos casos de dengue hubo en Tucumán en 2024?',
+      '¿Existe Dios?',
+      '¿Tenemos obligación moral de votar?',
+      '¿A cuántos km está la Luna?'
+    ],
+    correcta:2,
+    dato:'La obligación moral de votar no se responde con datos ni con fe. Requiere argumentar sobre deberes cívicos, legitimidad del Estado y responsabilidad ciudadana — todos temas filosóficos.' },
+
+  { eje:'tipos', tipo:'mc',
+    texto:'¿Qué ocurre cuando se mezcla el tipo de pregunta con el tipo de respuesta en un debate?',
+    opciones:[
+      'El debate se vuelve más productivo',
+      'Los interlocutores están hablando desde terrenos distintos sin darse cuenta, lo que genera confusión',
+      'Siempre se llega a un acuerdo más rápido',
+      'No pasa nada especial'
+    ],
+    correcta:1,
+    dato:'Ese es el error más frecuente en debates: responder una pregunta filosófica con datos, o una pregunta científica con creencias. La filosofía enseña a distinguir el terreno antes de argumentar.' },
+
+  { eje:'tipos', tipo:'vf',
+    texto:'Las categorías de pregunta filosófica, científica y religiosa son muros impenetrables: ninguna pregunta puede estar en la frontera entre dos categorías.',
+    opciones:['VERDADERO','FALSO'],
+    correcta:1,
+    dato:'La app lo aclara: hay preguntas fronterizas. "¿Tiene alma un feto?" mezcla biología, filosofía y teología. Distinguir no significa separar para siempre: significa saber desde qué lugar estás respondiendo.' },
+
+  // ══ RASGOS ══
+  { eje:'rasgos', tipo:'mc',
+    texto:'¿Qué significa que una pregunta filosófica sea "universal"?',
+    opciones:[
+      'Que solo la pueden hacer los profesores universitarios',
+      'Que es válida en cualquier tiempo, lugar y cultura',
+      'Que tiene una respuesta aceptada por toda la humanidad',
+      'Que se puede buscar en cualquier enciclopedia'
+    ],
+    correcta:1,
+    dato:'Una pregunta filosófica como "¿qué es la justicia?" tiene sentido en Argentina, en Japón o en el siglo III a.C. No depende de un contexto particular — eso es universalidad.' },
+
+  { eje:'rasgos', tipo:'mc',
+    texto:'La palabra "radical" en "radicalidad filosófica" proviene del latín "radix", que significa:',
+    opciones:['Peligroso','Raíz','Extremo','Nuevo'],
+    correcta:1,
+    dato:'Radical viene de radix = raíz. Una pregunta filosófica es radical porque va a la raíz de las cosas, a sus fundamentos, en lugar de quedarse en la superficie o en los síntomas.' },
+
+  { eje:'rasgos', tipo:'vf',
+    texto:'Que una pregunta filosófica no tenga una respuesta única significa que todas las respuestas posibles son igualmente válidas.',
+    opciones:['VERDADERO','FALSO'],
+    correcta:1,
+    dato:'No. Que no haya UNA respuesta correcta no significa que todo vale. Hay respuestas mejor argumentadas, más coherentes, que contemplan más casos. La filosofía distingue opinión sin fundamento de posición filosófica con argumentos sólidos.' },
+
+  { eje:'rasgos', tipo:'mc',
+    texto:'¿Cuál de estos rasgos describe mejor la "apertura" de las preguntas filosóficas?',
+    opciones:[
+      'Que tienen muchas respuestas correctas simultáneas',
+      'Que cada respuesta abre nuevas preguntas más profundas',
+      'Que se pueden responder sin pensar',
+      'Que son imposibles de responder'
+    ],
+    correcta:1,
+    dato:'Las preguntas filosóficas son como cebollas: cada capa que sacás revela otra más profunda. "¿Qué es la libertad?" → "¿Es libre un adicto?" → "¿Qué hace posible la libertad?" No tienen fondo, y eso es una virtud.' },
+
+  { eje:'rasgos', tipo:'mc',
+    texto:'En filosofía, ¿cuál es la única autoridad válida para sostener una posición?',
+    opciones:[
+      'El presidente o gobernante de turno',
+      'Un médico famoso en Instagram',
+      'El argumento bien construido con premisas sólidas',
+      'La opinión de la mayoría'
+    ],
+    correcta:2,
+    dato:'En filosofía no importa QUIÉN dice algo sino QUÉ razones da. Un Premio Nobel puede decir algo filosóficamente absurdo. Un adolescente puede plantear un argumento sólido. Eso es profundamente democrático.' },
+
+  { eje:'rasgos', tipo:'vf',
+    texto:'Un argumento filosófico válido consiste en una serie de afirmaciones donde algunas (premisas) sostienen a otra (conclusión).',
+    opciones:['VERDADERO','FALSO'],
+    correcta:0,
+    dato:'Exactamente. El ejemplo clásico: "Todos los humanos mueren" (premisa 1) + "Sócrates es humano" (premisa 2) → "Por lo tanto, Sócrates morirá" (conclusión). Las preguntas filosóficas exigen que des y defiendas tus premisas.' },
+
+  // ══ SÓCRATES ══
+  { eje:'socrates', tipo:'mc',
+    texto:'¿De qué acusaron a Sócrates en Atenas, siendo su crimen real hacer preguntas incómodas al poder?',
+    opciones:[
+      'Robo y deserción',
+      'Corromper a la juventud y no creer en los dioses de la ciudad',
+      'Practicar medicina sin título',
+      'Escribir libros sin permiso del Estado'
+    ],
+    correcta:1,
+    dato:'Sócrates fue condenado a muerte en 399 a.C. La acusación formal fue impiedad y corrupción de la juventud. El crimen real: desestabilizar con preguntas las certezas del poder democrático ateniense.' },
+
+  { eje:'socrates', tipo:'mc',
+    texto:'¿Qué método usaba Sócrates para ayudar a otros a "dar a luz" sus propios pensamientos mediante preguntas?',
+    opciones:['Dialéctica hegeliana','Mayéutica','Hermenéutica','Fenomenología'],
+    correcta:1,
+    dato:'Mayéutica viene del griego "maïeutikós" = arte de la partera. Sócrates decía que su madre era partera de cuerpos y él era partero de ideas: no daba respuestas, hacía preguntas que obligaban al otro a pensar por sí mismo.' },
+
+  { eje:'socrates', tipo:'vf',
+    texto:'Sócrates dejó escritas sus ideas en varios libros que hoy podemos leer directamente.',
+    opciones:['VERDADERO','FALSO'],
+    correcta:1,
+    dato:'Sócrates no escribió nada. Todo lo que sabemos de él proviene de sus discípulos, especialmente Platón, quien lo convirtió en protagonista de sus Diálogos. También Jenofonte y Aristófanes lo describen.' },
+
+  { eje:'socrates', tipo:'mc',
+    texto:'Sócrates se comparó a sí mismo con un tábano y a Atenas con un caballo grande y perezoso. ¿Qué simbolizaba el tábano en esa metáfora?',
+    opciones:[
+      'Un animal dañino que la ciudad debía eliminar',
+      'El filósofo que pica con preguntas incómodas para que la ciudad no se duerma en su complacencia',
+      'La velocidad del pensamiento filosófico',
+      'El pequeño tamaño de la filosofía comparada con la política'
+    ],
+    correcta:1,
+    dato:'Sócrates usa esta metáfora en la Apología. La ciudad democrática tiende a la autocomplacencia. El filósofo-tábano la interrumpe con preguntas que la obligan a cuestionarse. Por eso lo mataron.' },
+
+  { eje:'socrates', tipo:'mc',
+    texto:'¿Qué significa filosóficamente la frase "Solo sé que no sé nada"?',
+    opciones:[
+      'Que Sócrates era ignorante y no había estudiado suficiente',
+      'Que la filosofía no sirve para aprender nada',
+      'Que la ignorancia consciente es el punto de partida honesto que evita la arrogancia intelectual',
+      'Que es imposible conocer la verdad'
+    ],
+    correcta:2,
+    dato:'La ignorancia socrática no es derrota: es la base del pensamiento filosófico. Quien cree que ya sabe todo deja de aprender. La conciencia de la propia ignorancia abre la búsqueda genuina.' },
+
+  { eje:'socrates', tipo:'vf',
+    texto:'El filósofo es diferente al fanático en que puede cambiar de posición cuando aparece un mejor argumento, sin sentir que traiciona su identidad.',
+    opciones:['VERDADERO','FALSO'],
+    correcta:0,
+    dato:'Exactamente. La app lo marca así: el fanático cree que ya tiene la verdad completa y no puede cambiar sin traicionarse. El filósofo sabe que sus respuestas son provisorias y que cambiarlas ante un mejor argumento es una virtud.' },
+
+  // ══ VIDA ══
+  { eje:'vida', tipo:'mc',
+    texto:'Cuando alguien ve que un compañero fue sancionado injustamente mientras que otro con más recursos no lo fue y pregunta "¿qué es la justicia?", ¿qué rama de la filosofía está ejerciendo?',
+    opciones:['Estética','Lógica','Ética y filosofía política','Metafísica'],
+    correcta:2,
+    dato:'La ética pregunta qué es el bien y cómo debemos actuar. La filosofía política pregunta qué hace justa a una sociedad. Ambas aparecen cuando detectamos desigualdad ante la ley.' },
+
+  { eje:'vida', tipo:'mc',
+    texto:'"Todo el mundo comparte esto en redes, así que debe ser verdad." ¿Qué pregunta filosófica oculta tiene esta afirmación?',
+    opciones:[
+      '¿Cuántos usuarios tiene esa red social?',
+      '¿La popularidad de una idea es evidencia de su verdad? ¿Qué es la verdad?',
+      '¿Está bien copiar el contenido de otros?',
+      '¿Cuánto tiempo pasamos en el celular?'
+    ],
+    correcta:1,
+    dato:'La pregunta sobre si la popularidad implica verdad pertenece a la gnoseología y epistemología. La filosofía nos da herramientas para no confundir lo viral con lo verdadero.' },
+
+  { eje:'vida', tipo:'vf',
+    texto:'La filosofía sí da recetas exactas sobre cómo votar, en qué creer o cómo comportarse en cada situación.',
+    opciones:['VERDADERO','FALSO'],
+    correcta:1,
+    dato:'La app lo dice claramente: la filosofía no da recetas. Da herramientas para pensar mejor, detectar manipulaciones y defender con argumentos lo que uno considera justo.' },
+
+  { eje:'vida', tipo:'mc',
+    texto:'"Paso más tiempo en el juego que en el mundo real. ¿Eso es un problema?" ¿A qué ramas filosóficas invita a pensar?',
+    opciones:[
+      'Lógica y matemática',
+      'Metafísica (¿qué es real?) y filosofía de la mente (¿tiene valor la experiencia virtual?)',
+      'Ética del trabajo y derecho laboral',
+      'Filosofía de la ciencia'
+    ],
+    correcta:1,
+    dato:'La app incluye este ejemplo: el videojuego nos lleva a preguntar qué hace que una experiencia sea "real" y si la felicidad virtual vale menos que la "real". Eso es metafísica y filosofía de la mente.' },
+
+  { eje:'vida', tipo:'mc',
+    texto:'¿Cuál es la diferencia filosófica entre preguntar "¿tenemos obligación moral de votar?" y preguntar "¿cuántos votos necesita un candidato para ganar?"?',
+    opciones:[
+      'Ninguna diferencia, ambas son políticas',
+      'La primera es filosófica porque trata sobre deberes morales; la segunda es técnica-electoral',
+      'La segunda es filosófica porque involucra números',
+      'Solo la segunda puede responderse con datos'
+    ],
+    correcta:1,
+    dato:'¿Tenemos obligación de votar? es una pregunta sobre deberes morales y legitimidad — filosofía política. ¿Cuántos votos necesita? es un cálculo electoral que se responde con los datos de la normativa vigente.' },
+
+  // ══ RAMAS ══
+  { eje:'ramas', tipo:'mc',
+    texto:'¿Qué rama de la filosofía pregunta "¿qué existe realmente?" y "¿qué es el ser?"?',
+    opciones:['Ética','Estética','Metafísica / Ontología','Lógica'],
+    correcta:2,
+    dato:'La Metafísica (u Ontología) es la rama más "profunda" de la filosofía. Pregunta por la naturaleza última de la realidad: tiempo, espacio, materia, identidad, existencia. Es lo que estudiamos en el Tema 2 con los griegos presocráticos.' },
+
+  { eje:'ramas', tipo:'mc',
+    texto:'¿Qué rama estudia las fuentes y límites del conocimiento humano, como la razón, los sentidos y la experiencia?',
+    opciones:['Filosofía política','Gnoseología / Epistemología','Estética','Ética'],
+    correcta:1,
+    dato:'Gnoseología (o Epistemología) estudia el conocimiento: cómo conocemos, qué podemos saber con certeza, cuáles son los límites de nuestro acceso a la realidad. Se verá en profundidad en la Unidad 4.' },
+
+  { eje:'ramas', tipo:'vf',
+    texto:'La Lógica filosófica estudia las reglas del pensamiento correcto y los errores de razonamiento llamados falacias.',
+    opciones:['VERDADERO','FALSO'],
+    correcta:0,
+    dato:'Exactamente. La Lógica estudia cómo razonamos correctamente y qué hace válido un argumento. Las falacias son errores de razonamiento. Es lo que se verá en el Tema 4 de esta misma Unidad 1.' },
+
+  { eje:'ramas', tipo:'mc',
+    texto:'¿Qué rama filosófica conecta más directamente con preguntas sobre el Estado, la democracia y los derechos en Argentina?',
+    opciones:['Estética','Filosofía de la ciencia','Filosofía política','Metafísica'],
+    correcta:2,
+    dato:'La Filosofía Política analiza qué hace legítimo al poder, qué es la justicia social, qué derechos tenemos y qué debemos al Estado. Conecta directamente con la realidad argentina.' },
+
+  { eje:'ramas', tipo:'mc',
+    texto:'¿Qué rama de la filosofía reflexiona sobre la experiencia estética, la creatividad y el juicio de gusto?',
+    opciones:['Ética','Lógica','Estética','Gnoseología'],
+    correcta:2,
+    dato:'La Estética pregunta qué es la belleza, qué hace valioso al arte, qué experimentamos cuando contemplamos algo bello. No toda la filosofía es abstracta: la estética conecta con la vida sensible.' },
+
+  { eje:'ramas', tipo:'vf',
+    texto:'La Filosofía de la Ciencia estudia los fundamentos, métodos y límites del conocimiento científico.',
+    opciones:['VERDADERO','FALSO'],
+    correcta:0,
+    dato:'Correcto. La Filosofía de la Ciencia pregunta qué hace científico al conocimiento, cuáles son sus límites y si puede explicarlo todo. Conecta con biología, física, ciencias sociales y el debate sobre la verdad científica.' }
+];
+
+// ── ESTADO ──
+let st = {
+  preguntas:[], i:0, score:0, cor:0, inc:0, tago:0,
+  racha:0, rachMax:0, timer:null, tresto:45,
+  resp:false, statsEjes:{}, difKey:'', difSeg:45,
+  opcionesActuales:[], correctaActual:0, aprobacionInfo:{}
+};
+let difSel = null;
+let jugador = { nombre:'', apellido:'', curso:'' };
+
+// ── REGISTRO ──
+function checkRegistro() {
+  const d = JSON.parse(localStorage.getItem('chronos_jugador_t3') || 'null');
+  if (d && d.nombre) {
+    jugador = d;
+    document.getElementById('screen-registro').style.display = 'none';
+    document.getElementById('screen-intro').style.display = 'flex';
+  } else {
+    document.getElementById('screen-registro').style.display = 'flex';
+    document.getElementById('screen-intro').style.display = 'none';
+  }
+}
+
+function guardarRegistro() {
+  const n = document.getElementById('reg-nombre').value.trim();
+  const a = document.getElementById('reg-apellido').value.trim();
+  const c = document.getElementById('reg-curso').value.trim();
+  if (!n || !a || !c) { alert('Por favor completá todos los campos.'); return; }
+  jugador = { nombre:n, apellido:a, curso:c };
+  localStorage.setItem('chronos_jugador_t3', JSON.stringify(jugador));
+  document.getElementById('screen-registro').style.display = 'none';
+  document.getElementById('screen-intro').style.display = 'flex';
+}
+
+// ── DIFICULTAD ──
+function seleccionarDif(k, s) {
+  difSel = k;
+  document.querySelectorAll('.dif-card').forEach(c => c.classList.remove('selected'));
+  document.querySelector(`.dif-card.${k}`).classList.add('selected');
+  document.getElementById('btn-start').classList.add('ready');
+}
+
+// ── INICIAR ──
+function iniciarQuiz() {
+  if (!difSel) return;
+  const dif = DIFS[difSel];
+  st.preguntas = mezclarPorEje(PREGUNTAS);
+  st.i = 0; st.score = 0; st.cor = 0; st.inc = 0; st.tago = 0;
+  st.racha = 0; st.rachMax = 0;
+  st.difKey = difSel; st.difSeg = dif.seg; st.statsEjes = {};
+  Object.keys(EJES).forEach(e => { st.statsEjes[e] = { total:0, cor:0 }; });
+  const b = document.getElementById('hud-dif-badge');
+  b.textContent = dif.badge; b.style.color = dif.color; b.style.borderColor = dif.color;
+  document.getElementById('screen-intro').style.display = 'none';
+  document.getElementById('screen-quiz').style.display = 'flex';
+  document.getElementById('hud-qtotal').textContent = st.preguntas.length;
+  mostrarPregunta();
+}
+
+function mezclarPorEje(p) {
+  const orden = ['asombro','tipos','rasgos','socrates','vida','ramas'];
+  let r = [];
+  orden.forEach(e => { let a = p.filter(x => x.eje === e); r = r.concat(shuffle(a)); });
+  return r;
+}
+function shuffle(a) { return a.map(v => [Math.random(), v]).sort((x,y) => x[0]-y[0]).map(v => v[1]); }
+
+function prepararOpciones(p) {
+  let opciones = [...p.opciones];
+  const indices = opciones.map((_,i) => i);
+  for (let i = indices.length-1; i > 0; i--) {
+    const j = Math.floor(Math.random()*(i+1));
+    [indices[i],indices[j]] = [indices[j],indices[i]];
+  }
+  const opcionesMezcladas = indices.map(i => opciones[i]);
+  const nuevaCorrecta = indices.indexOf(p.correcta);
+  return { opciones:opcionesMezcladas, correcta:nuevaCorrecta };
+}
+
+function mostrarPregunta() {
+  if (st.i >= st.preguntas.length) { mostrarResultado(); return; }
+  const p = st.preguntas[st.i];
+  const ei = EJES[p.eje];
+  st.resp = false;
+  const prep = prepararOpciones(p);
+  st.opcionesActuales = prep.opciones;
+  st.correctaActual = prep.correcta;
+  document.getElementById('hud-qnum').textContent = st.i + 1;
+  document.getElementById('hud-score').textContent = st.score.toLocaleString();
+  actualizarProgreso();
+  const prev = st.i > 0 ? st.preguntas[st.i-1].eje : null;
+  const letras = ['A','B','C','D'];
+  let html = '';
+  if (p.eje !== prev) {
+    html += `<div style="text-align:center;padding:16px 0 22px;border-bottom:1px solid rgba(255,255,255,.07);margin-bottom:18px;">
+      <div style="font-family:'Press Start 2P',monospace;font-size:clamp(9px,2.8vw,13px);color:${ei.color};text-shadow:0 0 10px ${ei.color};margin-bottom:5px;">${ei.emoji} ${ei.label}</div>
+      <div style="font-size:11px;color:var(--dim);letter-spacing:2px;">NUEVO EJE TEMÁTICO</div></div>`;
+  }
+  html += `<div class="eje-header">
+    <span class="eje-tag" style="color:${ei.color};border-color:${ei.color}">${ei.emoji} ${ei.label}</span>
+    <span class="pregunta-num">Preg. ${st.i+1}</span>
+    <span class="pregunta-tipo">${p.tipo==='vf'?'V / F':'Opción múltiple'}</span>
+  </div>
+  <div class="pregunta-texto" style="border-left-color:${ei.color}">${p.texto}</div>
+  <div class="opciones-grid" id="og">`;
+  st.opcionesActuales.forEach((op, i) => {
+    html += `<button class="opcion-btn" id="op${i}" onclick="responder(${i})"><span class="opcion-key">${letras[i]}</span>${op}</button>`;
+  });
+  html += `</div><div class="feedback-box" id="fb"></div>
+  <button class="btn-siguiente" id="bs" onclick="siguiente()">SIGUIENTE ▶</button>`;
+  document.getElementById('quiz-body').innerHTML = html;
+  iniciarTimer();
+  crearParticulas(ei.color, 2);
+}
+
+function iniciarTimer() {
+  clearInterval(st.timer);
+  st.tresto = st.difSeg;
+  actualizarTimer();
+  st.timer = setInterval(() => {
+    st.tresto--; actualizarTimer();
+    if (st.tresto <= 0) { clearInterval(st.timer); if (!st.resp) tiempoAgotado(); }
+  }, 1000);
+}
+function actualizarTimer() {
+  const pct = (st.tresto / st.difSeg) * 100;
+  const f = document.getElementById('btf'), n = document.getElementById('tnum');
+  if (!f) return;
+  f.style.width = pct + '%'; n.textContent = st.tresto;
+  const m = st.difSeg * .5, b = st.difSeg * .27;
+  if (st.tresto > m) { f.style.background='var(--green)'; n.style.color='var(--green)'; }
+  else if (st.tresto > b) { f.style.background='var(--amber)'; n.style.color='var(--amber)'; }
+  else { f.style.background='var(--red)'; n.style.color='var(--red)'; }
+}
+function tiempoAgotado() {
+  st.resp = true; st.tago++; st.racha = 0;
+  const p = st.preguntas[st.i];
+  deshabilitar(); marcarCor(st.correctaActual);
+  fb('tiempo', `⏱ TIEMPO AGOTADO — Correcta: <strong>${st.opcionesActuales[st.correctaActual]}</strong><br><span style="color:var(--dim)">${p.dato}</span>`);
+  flash('red');
+  document.getElementById('bs').style.display = 'inline-block';
+  st.statsEjes[p.eje].total++;
+}
+function responder(idx) {
+  if (st.resp) return; st.resp = true; clearInterval(st.timer);
+  const p = st.preguntas[st.i];
+  st.statsEjes[p.eje].total++;
+  deshabilitar();
+  if (idx === st.correctaActual) {
+    const bonus = st.racha >= 2 ? 2 : 1;
+    const pts = Math.ceil(100 + (st.tresto * 3)) * bonus;
+    st.score += pts; st.cor++; st.racha++; st.statsEjes[p.eje].cor++;
+    if (st.racha > st.rachMax) st.rachMax = st.racha;
+    document.getElementById('op'+idx).classList.add('correcta');
+    fb('correcto', `✅ ¡CORRECTO! +${pts} PTS ${bonus>1?'🔥 RACHA x'+bonus:''}<br><span style="opacity:.8;font-size:13px">${p.dato}</span>`);
+    flash('green');
+    if (st.racha >= 3) combo(`🔥 RACHA x${st.racha}!`);
+  } else {
+    st.inc++; st.racha = 0;
+    document.getElementById('op'+idx).classList.add('incorrecta');
+    marcarCor(st.correctaActual);
+    fb('incorrecto', `❌ Incorrecto. Era: <strong>${st.opcionesActuales[st.correctaActual]}</strong><br><span style="opacity:.8;font-size:13px">${p.dato}</span>`);
+    flash('red');
+  }
+  document.getElementById('hud-score').textContent = st.score.toLocaleString();
+  document.getElementById('bs').style.display = 'inline-block';
+}
+function deshabilitar() { document.querySelectorAll('.opcion-btn').forEach(b => b.disabled = true); }
+function marcarCor(i) { const b = document.getElementById('op'+i); if(b) b.classList.add('correcta'); }
+function fb(tipo, html) { const b = document.getElementById('fb'); b.className = 'feedback-box '+tipo; b.innerHTML = html; b.style.display = 'block'; }
+function siguiente() { st.i++; actualizarProgreso(); mostrarPregunta(); }
+function actualizarProgreso() {
+  const t = st.preguntas.length, p = t > 0 ? Math.round((st.i/t)*100) : 0;
+  document.getElementById('bgf').style.width = p + '%';
+  document.getElementById('bgp').textContent = p + '%';
+}
+
+function mostrarResultado() {
+  clearInterval(st.timer);
+  document.getElementById('screen-quiz').style.display = 'none';
+  document.getElementById('screen-resultado').style.display = 'flex';
+  const total = st.preguntas.length, pct = Math.round((st.cor/total)*100);
+  const dif = DIFS[st.difKey];
+  const titulo = pct===100?'⚡ PERFECTO ⚡':pct>=80?'🏆 EXCELENTE':pct>=60?'✅ APROBADO':pct>=40?'⚠ EN PROGRESO':'💀 SEGUÍ INTENTANDO';
+  const colorT = pct===100?'var(--gold)':pct>=80?'var(--green)':pct>=60?'var(--cyan)':pct>=40?'var(--amber2)':'var(--red)';
+  document.getElementById('res-titulo').textContent = titulo;
+  document.getElementById('res-titulo').style.color = colorT;
+  document.getElementById('res-dif').textContent = 'Nivel: ' + dif.badge;
+  document.getElementById('res-dif').style.color = dif.color;
+  document.getElementById('res-score').textContent = st.score.toLocaleString();
+  document.getElementById('res-pct').textContent = pct + '% CORRECTO';
+  document.getElementById('rc').textContent = st.cor;
+  document.getElementById('ri').textContent = st.inc;
+  document.getElementById('rt').textContent = st.tago;
+  document.getElementById('rr').textContent = st.rachMax;
+  let html = '';
+  Object.keys(EJES).forEach(e => {
+    const s = st.statsEjes[e], pE = s.total>0?Math.round((s.cor/s.total)*100):0, info = EJES[e];
+    html += `<div class="eje-res-row">
+      <div class="eje-res-label" style="color:${info.color}">${info.emoji} ${info.label}</div>
+      <div class="eje-res-barra"><div class="eje-res-fill" style="width:${pE}%;background:${info.color};box-shadow:0 0 6px ${info.color}"></div></div>
+      <div class="eje-res-num">${s.cor}/${s.total}</div></div>`;
+  });
+  document.getElementById('ejes-res').innerHTML = html;
+  const btn = document.getElementById('btn-enviar');
+  if (btn) { btn.disabled = false; btn.textContent = '📤 ENVIAR RESULTADO AL PROFESOR'; }
+  document.getElementById('envio-status').textContent = '';
+  st.aprobacionInfo = mostrarAprobacion(st.score, st.preguntas.length, st.difKey);
+  crearParticulas(pct===100?'var(--gold)':'var(--purple)', pct===100?20:6);
+}
+
+function mostrarAprobacion(score, totalPregs, difKey) {
+  const dif = DIFS[difKey];
+  const maxTeorico = totalPregs * (100 + dif.seg * 3) * 2;
+  const maxNivel   = maxTeorico * 0.92;
+  const pctReal    = Math.min(100, Math.round((score / maxNivel) * 100));
+  const aprobado   = pctReal >= 70;
+  document.getElementById('linea70').style.left = '70%';
+  setTimeout(() => {
+    const fill = document.getElementById('aprobacion-fill');
+    fill.style.width = pctReal + '%';
+    fill.className = 'aprobacion-fill ' + (aprobado ? 'aprobado' : 'reprobado');
+  }, 300);
+  const dinfo = DIFS[difKey];
+  document.getElementById('aprobacion-title').innerHTML = `<span style="color:${dinfo.color}">${dinfo.badge}</span> &nbsp;—&nbsp; NIVEL DE APROBACIÓN`;
+  document.getElementById('aprobacion-pct-label').textContent = pctReal + '% logrado';
+  document.getElementById('aprobacion-badge').textContent = aprobado ? '✅ APROBADO' : '❌ NO APROBADO';
+  document.getElementById('aprobacion-badge').className = 'aprobacion-badge ' + (aprobado ? 'ok' : 'no');
+  document.getElementById('aprobacion-detalle').textContent = `Nivel ${dinfo.nombre} · Mínimo aprobación: 70%`;
+  return { pctReal, aprobado };
+}
+
+function reiniciar() {
+  document.getElementById('screen-resultado').style.display = 'none';
+  document.getElementById('screen-intro').style.display = 'flex';
+  difSel = null;
+  document.querySelectorAll('.dif-card').forEach(c => c.classList.remove('selected'));
+  document.getElementById('btn-start').classList.remove('ready');
+}
+
+async function enviarResultado() {
+  const btn = document.getElementById('btn-enviar');
+  const status = document.getElementById('envio-status');
+  btn.disabled = true;
+  status.style.color = 'var(--cyan)';
+  status.textContent = '⏳ Enviando...';
+  const dif   = DIFS[st.difKey];
+  const total = st.preguntas.length;
+  const pct   = Math.round((st.cor / total) * 100);
+  const aInfo = st.aprobacionInfo || {};
+  const fecha = new Date().toLocaleString('es-AR');
+  const payload = {
+    nombre:         jugador.nombre,
+    apellido:       jugador.apellido,
+    curso:          jugador.curso,
+    nivel:          dif.nombre,
+    score:          st.score,
+    pct_correctas:  pct,
+    pct_aprobacion: aInfo.pctReal || 0,
+    aprobado:       aInfo.aprobado || false,
+    correctas:      st.cor,
+    incorrectas:    st.inc,
+    tiempo_agotado: st.tago,
+    racha_max:      st.rachMax,
+    fecha:          fecha,
+    unidad:         1,
+    tema:           3
+  };
+  try {
+    await fetch(GAS_URL, { method:'POST', mode:'no-cors', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload) });
+    status.style.color = 'var(--green)';
+    status.textContent = '✅ Resultado enviado al profesor.';
+    btn.textContent = '✅ ENVIADO';
+  } catch(e) {
+    status.style.color = 'var(--red)';
+    status.textContent = '❌ Error al enviar. Verificá tu conexión.';
+    btn.disabled = false;
+  }
+}
+
+function flash(c) { const e=document.getElementById('flash'); e.className='flash-overlay '+c; e.style.opacity='1'; setTimeout(()=>e.style.opacity='0',150); }
+function combo(t) { const e=document.createElement('div'); e.className='combo-popup'; e.textContent=t; document.body.appendChild(e); setTimeout(()=>e.remove(),1400); }
+function crearParticulas(c, n) {
+  for (let i=0; i<n; i++) setTimeout(()=>{
+    const p=document.createElement('div'); p.className='particle';
+    p.style.left=Math.random()*100+'vw'; p.style.background=c; p.style.boxShadow=`0 0 5px ${c}`;
+    p.style.animationDuration=(2+Math.random()*3)+'s'; p.style.animationDelay=Math.random()*.5+'s';
+    document.body.appendChild(p); setTimeout(()=>p.remove(),5000);
+  }, i*80);
+}
+
+// ── INIT ──
+checkRegistro();
+</script>
+</body>
+</html>
