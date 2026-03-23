@@ -24,8 +24,8 @@
   --bg2:     #080818;
   --surface: #0c0c22;
   --white:   #e8e0ff;
-  --dim:     #5a5580;
-  --border:  #1a1a3a;
+  --dim:     #a29dc9;
+  --border:  #43435a;
   --purple:  #b44ffc;
   --cyan:    #00e5ff;
   --green:   #00ff88;
@@ -197,9 +197,9 @@ body::before{
 <!-- ══ REGISTRO ══ -->
 <div id="screen-registro">
   <div class="reg-box">
-    <div class="reg-title">CHRONOS<br>QUIZ</div>
+    <div class="reg-title">ΦΙΛΟΣΟΦIΑ<br>QUIZ</div>
     <div class="reg-sub">▸ REGISTRO DEL JUGADOR ◂</div>
-    <div class="reg-tema">UNIDAD I · TEMA 3 · ¿QUÉ ES FILOSOFAR?</div>
+    <div class="reg-tema">UNIDAD I · TEMA 2 · ¿QUÉ ES FILOSOFAR?</div>
     <div class="reg-field">
       <label class="reg-label">▶ NOMBRE</label>
       <input class="reg-input" id="reg-nombre" type="text" placeholder="Tu nombre" autocomplete="given-name">
@@ -218,8 +218,8 @@ body::before{
 
 <!-- ══ INTRO ══ -->
 <div id="screen-intro">
-  <div class="logo-title">CHRONOS<br>QUIZ</div>
-  <div class="logo-sub">¿Qué es Filosofar? · Unidad I · Tema 3</div>
+  <div class="logo-title">ΦΙΛΟΣΟΦIΑ<br>QUIZ</div>
+  <div class="logo-sub">¿Qué es Filosofar? · Unidad I · Tema 2</div>
 
   <div class="intro-box">
     <h3>⚙ EJES TEMÁTICOS</h3>
@@ -351,19 +351,19 @@ const PREGUNTAS = [
     correcta:1,
     dato:'Thaumazein (θαυμάζειν) es la admiración o asombro. Tanto Platón como Aristóteles lo identifican como el único punto de partida posible del filosofar.' },
 
-  { eje:'asombro', tipo:'vf',
+  { eje:'asombro', tipo:'mc',
     texto:'Según Aristóteles, el deseo de saber es una tendencia natural del ser humano que no depende de la utilidad práctica del conocimiento.',
-    opciones:['VERDADERO','FALSO'],
+    opciones:['Verdadero','Falso','Solo en los sabios, no en todos los hombres','Solo cuando el conocimiento tiene utilidad práctica'],
     correcta:0,
     dato:'Aristóteles abre la Metafísica diciendo exactamente eso: "Todos los hombres tienen por naturaleza el deseo de saber." Y como prueba señala el placer que produce ver y conocer, incluso sin ninguna utilidad.' },
 
   { eje:'asombro', tipo:'mc',
     texto:'¿Qué diferencia al asombro filosófico de la curiosidad ordinaria?',
     opciones:[
-      'El asombro filosófico se resuelve buscando en Google',
-      'La curiosidad ordinaria genera preguntas más profundas',
+      'El asombro filosófico se resuelve con tecnología o buscadores de internet modernos',
+      'La curiosidad ordinaria genera preguntas más profundas y con mayor rigor conceptual',
       'El asombro filosófico genera perplejidad ante algo que parece obvio y exige pensar, no solo buscar',
-      'Son exactamente lo mismo, solo cambia el nombre'
+      'Son exactamente lo mismo; solo cambia el nombre que les dan los filósofos'
     ],
     correcta:2,
     dato:'La curiosidad ordinaria se resuelve con datos. El asombro filosófico surge cuando algo que todos dan por sabido de repente aparece como misterioso: ¿qué es el tiempo? ¿qué soy yo realmente?' },
@@ -379,19 +379,19 @@ const PREGUNTAS = [
     correcta:2,
     dato:'El ejemplo del estadio aparece en la app: dos personas ven lo mismo y llegan a conclusiones opuestas. Eso nos lleva a preguntar si existe la percepción objetiva — una pregunta filosófica genuina.' },
 
-  { eje:'asombro', tipo:'vf',
+  { eje:'asombro', tipo:'mc',
     texto:'La filosofía nació principalmente de la necesidad práctica de sobrevivir y resolver problemas cotidianos.',
-    opciones:['VERDADERO','FALSO'],
+    opciones:['Verdadero','Falso','Solo en Oriente, no en la Grecia clásica','Es cierto para algunos filósofos pero no para otros'],
     correcta:1,
     dato:'Tanto Platón como Aristóteles coinciden: la filosofía nació del tiempo libre y el asombro, no de la necesidad. Aristóteles señala que surgió cuando la gente ya tenía resueltas sus necesidades básicas y podía ponerse a pensar.' },
 
   { eje:'asombro', tipo:'mc',
     texto:'¿Por qué un bebé que se asombra de todo NO es considerado filósofo?',
     opciones:[
-      'Porque los bebés no tienen lenguaje',
+      'Porque los bebés no tienen lenguaje ni comunicación formal desarrollada',
       'Porque el bebé no traduce el asombro en preguntas precisas que piensa con rigor y honestidad',
-      'Porque la filosofía es solo para adultos mayores',
-      'Porque los bebés no leen libros'
+      'Porque la filosofía está reservada exclusivamente para adultos de cierta edad',
+      'Porque los bebés no leen libros ni acceden a textos filosóficos'
     ],
     correcta:1,
     dato:'El asombro es condición necesaria pero no suficiente para filosofar. Lo que convierte el asombro en filosofía es la capacidad de transformarlo en preguntas precisas y pensarlas con rigor.' },
@@ -414,9 +414,9 @@ const PREGUNTAS = [
     correcta:2,
     dato:'Se pregunta por la justicia, que no se responde con experimentos ni con fe. Requiere argumentar desde principios racionales sobre qué es justo, qué derechos tenemos, qué debe garantizar el Estado.' },
 
-  { eje:'tipos', tipo:'vf',
+  { eje:'tipos', tipo:'mc',
     texto:'Una pregunta religiosa se puede resolver con un experimento científico bien diseñado.',
-    opciones:['VERDADERO','FALSO'],
+    opciones:['Verdadero','Falso','Solo con experimentos muy precisos y controlados','Depende del tipo de religión que se estudie'],
     correcta:1,
     dato:'No. Las preguntas religiosas (¿existe Dios? ¿qué quiere Dios?) pertenecen al ámbito de la fe y la revelación, no del método empírico. El desacuerdo religioso no se resuelve con datos.' },
 
@@ -434,17 +434,17 @@ const PREGUNTAS = [
   { eje:'tipos', tipo:'mc',
     texto:'¿Qué ocurre cuando se mezcla el tipo de pregunta con el tipo de respuesta en un debate?',
     opciones:[
-      'El debate se vuelve más productivo',
+      'El debate se vuelve más productivo y enriquecedor para todos los participantes',
       'Los interlocutores están hablando desde terrenos distintos sin darse cuenta, lo que genera confusión',
-      'Siempre se llega a un acuerdo más rápido',
-      'No pasa nada especial'
+      'Siempre se llega a un acuerdo más rápido y con menos conflictos que antes',
+      'No sucede nada relevante ni problemático en el intercambio de ideas'
     ],
     correcta:1,
     dato:'Ese es el error más frecuente en debates: responder una pregunta filosófica con datos, o una pregunta científica con creencias. La filosofía enseña a distinguir el terreno antes de argumentar.' },
 
-  { eje:'tipos', tipo:'vf',
+  { eje:'tipos', tipo:'mc',
     texto:'Las categorías de pregunta filosófica, científica y religiosa son muros impenetrables: ninguna pregunta puede estar en la frontera entre dos categorías.',
-    opciones:['VERDADERO','FALSO'],
+    opciones:['Verdadero','Falso','Solo para la filosofía medieval y la teología','Depende del contexto cultural en que se formule'],
     correcta:1,
     dato:'La app lo aclara: hay preguntas fronterizas. "¿Tiene alma un feto?" mezcla biología, filosofía y teología. Distinguir no significa separar para siempre: significa saber desde qué lugar estás respondiendo.' },
 
@@ -466,9 +466,9 @@ const PREGUNTAS = [
     correcta:1,
     dato:'Radical viene de radix = raíz. Una pregunta filosófica es radical porque va a la raíz de las cosas, a sus fundamentos, en lugar de quedarse en la superficie o en los síntomas.' },
 
-  { eje:'rasgos', tipo:'vf',
+  { eje:'rasgos', tipo:'mc',
     texto:'Que una pregunta filosófica no tenga una respuesta única significa que todas las respuestas posibles son igualmente válidas.',
-    opciones:['VERDADERO','FALSO'],
+    opciones:['Verdadero','Falso','Solo en estética, donde el gusto es completamente subjetivo','Solo si las respuestas parten de las mismas premisas'],
     correcta:1,
     dato:'No. Que no haya UNA respuesta correcta no significa que todo vale. Hay respuestas mejor argumentadas, más coherentes, que contemplan más casos. La filosofía distingue opinión sin fundamento de posición filosófica con argumentos sólidos.' },
 
@@ -494,9 +494,9 @@ const PREGUNTAS = [
     correcta:2,
     dato:'En filosofía no importa QUIÉN dice algo sino QUÉ razones da. Un Premio Nobel puede decir algo filosóficamente absurdo. Un adolescente puede plantear un argumento sólido. Eso es profundamente democrático.' },
 
-  { eje:'rasgos', tipo:'vf',
+  { eje:'rasgos', tipo:'mc',
     texto:'Un argumento filosófico válido consiste en una serie de afirmaciones donde algunas (premisas) sostienen a otra (conclusión).',
-    opciones:['VERDADERO','FALSO'],
+    opciones:['Verdadero','Falso','Solo si las premisas son comprobables científicamente','Solo cuando hay más de tres premisas en el argumento'],
     correcta:0,
     dato:'Exactamente. El ejemplo clásico: "Todos los humanos mueren" (premisa 1) + "Sócrates es humano" (premisa 2) → "Por lo tanto, Sócrates morirá" (conclusión). Las preguntas filosóficas exigen que des y defiendas tus premisas.' },
 
@@ -518,19 +518,19 @@ const PREGUNTAS = [
     correcta:1,
     dato:'Mayéutica viene del griego "maïeutikós" = arte de la partera. Sócrates decía que su madre era partera de cuerpos y él era partero de ideas: no daba respuestas, hacía preguntas que obligaban al otro a pensar por sí mismo.' },
 
-  { eje:'socrates', tipo:'vf',
+  { eje:'socrates', tipo:'mc',
     texto:'Sócrates dejó escritas sus ideas en varios libros que hoy podemos leer directamente.',
-    opciones:['VERDADERO','FALSO'],
+    opciones:['Verdadero','Falso','Solo dejó fragmentos en papiros que se conservaron','Escribió un tratado que Platón luego adaptó'],
     correcta:1,
     dato:'Sócrates no escribió nada. Todo lo que sabemos de él proviene de sus discípulos, especialmente Platón, quien lo convirtió en protagonista de sus Diálogos. También Jenofonte y Aristófanes lo describen.' },
 
   { eje:'socrates', tipo:'mc',
     texto:'Sócrates se comparó a sí mismo con un tábano y a Atenas con un caballo grande y perezoso. ¿Qué simbolizaba el tábano en esa metáfora?',
     opciones:[
-      'Un animal dañino que la ciudad debía eliminar',
+      'Un insecto peligroso y dañino que la ciudad ateniense tenía el deber de eliminar',
       'El filósofo que pica con preguntas incómodas para que la ciudad no se duerma en su complacencia',
-      'La velocidad del pensamiento filosófico',
-      'El pequeño tamaño de la filosofía comparada con la política'
+      'La rapidez y agilidad del pensamiento filosófico frente al razonamiento ordinario',
+      'El tamaño reducido de la filosofía en comparación con el poder real de la política'
     ],
     correcta:1,
     dato:'Sócrates usa esta metáfora en la Apología. La ciudad democrática tiende a la autocomplacencia. El filósofo-tábano la interrumpe con preguntas que la obligan a cuestionarse. Por eso lo mataron.' },
@@ -538,17 +538,17 @@ const PREGUNTAS = [
   { eje:'socrates', tipo:'mc',
     texto:'¿Qué significa filosóficamente la frase "Solo sé que no sé nada"?',
     opciones:[
-      'Que Sócrates era ignorante y no había estudiado suficiente',
-      'Que la filosofía no sirve para aprender nada',
+      'Que Sócrates era un ignorante que realmente no había estudiado ni aprendido suficiente',
+      'Que la práctica filosófica no conduce a ningún tipo de aprendizaje o conocimiento real',
       'Que la ignorancia consciente es el punto de partida honesto que evita la arrogancia intelectual',
-      'Que es imposible conocer la verdad'
+      'Que resulta absolutamente imposible llegar a conocer cualquier verdad sobre el mundo'
     ],
     correcta:2,
     dato:'La ignorancia socrática no es derrota: es la base del pensamiento filosófico. Quien cree que ya sabe todo deja de aprender. La conciencia de la propia ignorancia abre la búsqueda genuina.' },
 
-  { eje:'socrates', tipo:'vf',
+  { eje:'socrates', tipo:'mc',
     texto:'El filósofo es diferente al fanático en que puede cambiar de posición cuando aparece un mejor argumento, sin sentir que traiciona su identidad.',
-    opciones:['VERDADERO','FALSO'],
+    opciones:['Verdadero','Falso','Solo si cambia dentro del mismo sistema filosófico','Solo los filósofos estoicos, no los demás'],
     correcta:0,
     dato:'Exactamente. La app lo marca así: el fanático cree que ya tiene la verdad completa y no puede cambiar sin traicionarse. El filósofo sabe que sus respuestas son provisorias y que cambiarlas ante un mejor argumento es una virtud.' },
 
@@ -570,19 +570,19 @@ const PREGUNTAS = [
     correcta:1,
     dato:'La pregunta sobre si la popularidad implica verdad pertenece a la gnoseología y epistemología. La filosofía nos da herramientas para no confundir lo viral con lo verdadero.' },
 
-  { eje:'vida', tipo:'vf',
+  { eje:'vida', tipo:'mc',
     texto:'La filosofía sí da recetas exactas sobre cómo votar, en qué creer o cómo comportarse en cada situación.',
-    opciones:['VERDADERO','FALSO'],
+    opciones:['Verdadero','Falso','Solo en ética aplicada y bioética médica','Depende de la corriente filosófica que se consulte'],
     correcta:1,
     dato:'La app lo dice claramente: la filosofía no da recetas. Da herramientas para pensar mejor, detectar manipulaciones y defender con argumentos lo que uno considera justo.' },
 
   { eje:'vida', tipo:'mc',
     texto:'"Paso más tiempo en el juego que en el mundo real. ¿Eso es un problema?" ¿A qué ramas filosóficas invita a pensar?',
     opciones:[
-      'Lógica y matemática',
+      'Lógica formal y matemáticas aplicadas al diseño de sistemas digitales',
       'Metafísica (¿qué es real?) y filosofía de la mente (¿tiene valor la experiencia virtual?)',
-      'Ética del trabajo y derecho laboral',
-      'Filosofía de la ciencia'
+      'Ética del trabajo y derecho laboral sobre el uso del tiempo libre',
+      'Filosofía de la ciencia y epistemología del conocimiento técnico'
     ],
     correcta:1,
     dato:'La app incluye este ejemplo: el videojuego nos lleva a preguntar qué hace que una experiencia sea "real" y si la felicidad virtual vale menos que la "real". Eso es metafísica y filosofía de la mente.' },
@@ -611,9 +611,9 @@ const PREGUNTAS = [
     correcta:1,
     dato:'Gnoseología (o Epistemología) estudia el conocimiento: cómo conocemos, qué podemos saber con certeza, cuáles son los límites de nuestro acceso a la realidad. Se verá en profundidad en la Unidad 4.' },
 
-  { eje:'ramas', tipo:'vf',
+  { eje:'ramas', tipo:'mc',
     texto:'La Lógica filosófica estudia las reglas del pensamiento correcto y los errores de razonamiento llamados falacias.',
-    opciones:['VERDADERO','FALSO'],
+    opciones:['Verdadero','Falso','Solo estudia símbolos matemáticos y lógica formal','Solo analiza argumentos en textos filosóficos escritos'],
     correcta:0,
     dato:'Exactamente. La Lógica estudia cómo razonamos correctamente y qué hace válido un argumento. Las falacias son errores de razonamiento. Es lo que se verá en el Tema 4 de esta misma Unidad 1.' },
 
@@ -629,9 +629,9 @@ const PREGUNTAS = [
     correcta:2,
     dato:'La Estética pregunta qué es la belleza, qué hace valioso al arte, qué experimentamos cuando contemplamos algo bello. No toda la filosofía es abstracta: la estética conecta con la vida sensible.' },
 
-  { eje:'ramas', tipo:'vf',
+  { eje:'ramas', tipo:'mc',
     texto:'La Filosofía de la Ciencia estudia los fundamentos, métodos y límites del conocimiento científico.',
-    opciones:['VERDADERO','FALSO'],
+    opciones:['Verdadero','Falso','Solo estudia la física teórica y la biología molecular','Solo los métodos científicos, no sus fundamentos ni límites'],
     correcta:0,
     dato:'Correcto. La Filosofía de la Ciencia pregunta qué hace científico al conocimiento, cuáles son sus límites y si puede explicarlo todo. Conecta con biología, física, ciencias sociales y el debate sobre la verdad científica.' }
 ];
