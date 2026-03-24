@@ -891,7 +891,7 @@ async function enviarResultado() {
     nombre:         jugador.nombre,
     apellido:       jugador.apellido,
     curso:          jugador.curso,
-    nivel:          dif.nombre,
+    nivel:          {aprendiz:1,filosofo:2,maestro:3}[st.difKey] || 1,
     score:          st.score,
     pct_correctas:  pct,
     pct_aprobacion: aInfo.pctReal || 0,
