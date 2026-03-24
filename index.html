@@ -13,7 +13,7 @@
 <style>
 /*
   Chronos Quiz — ¿Qué es Filosofar?
-  Unidad 1 · Tema 3 · Filosofía 6.º Año
+  Unidad 1 · Tema 2 · Filosofía 6.º Año
   Escuela Amado Juri · Tucumán · Argentina
   Prof. Julio Alberto Lazarte
   v1.0 — 2026-03-11 — Versión inicial
@@ -318,7 +318,7 @@ body::before{
 <script>
 // ────────────────────────────────────────────────
 // CHRONOS QUIZ — ¿Qué es Filosofar?
-// Unidad 1 · Tema 3
+// Unidad 1 · Tema 2
 // v1.0 — 2026-03-11
 // ────────────────────────────────────────────────
 
@@ -648,7 +648,7 @@ let jugador = { nombre:'', apellido:'', curso:'' };
 
 // ── REGISTRO ──
 function checkRegistro() {
-  const d = JSON.parse(localStorage.getItem('chronos_jugador_t3') || 'null');
+  const d = JSON.parse(localStorage.getItem('chronos_jugador_t2') || 'null');
   if (d && d.nombre) {
     jugador = d;
     document.getElementById('screen-registro').style.display = 'none';
@@ -665,7 +665,7 @@ function guardarRegistro() {
   const c = document.getElementById('reg-curso').value.trim();
   if (!n || !a || !c) { alert('Por favor completá todos los campos.'); return; }
   jugador = { nombre:n, apellido:a, curso:c };
-  localStorage.setItem('chronos_jugador_t3', JSON.stringify(jugador));
+  localStorage.setItem('chronos_jugador_t2', JSON.stringify(jugador));
   document.getElementById('screen-registro').style.display = 'none';
   document.getElementById('screen-intro').style.display = 'flex';
 }
@@ -902,7 +902,7 @@ async function enviarResultado() {
     racha_max:      st.rachMax,
     fecha:          fecha,
     unidad:         1,
-    tema:           3
+    tema:           2
   };
   try {
     await fetch(GAS_URL, { method:'POST', mode:'no-cors', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload) });
